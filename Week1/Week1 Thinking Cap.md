@@ -1,5 +1,5 @@
 # Screenshot of the Site
-C:\Users\koguk\Picture\DH151week1screenshot
+![Screenshot of the Site](/relative/path/to/img.jpg?raw=true "Optional Title")
 
 # Link to the Site
 

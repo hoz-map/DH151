@@ -1,5 +1,6 @@
 # Screenshot of the Site
-![Screenshot of the Site](/relative/path/to/img.jpg?raw=true "Optional Title")
+![image](https://user-images.githubusercontent.com/74166310/113503572-aceb2e80-956d-11eb-8a08-882dfe877f32.png)
+
 
 # Link to the Site
 

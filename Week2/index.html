@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My Favorite Museums</title>
+	<meta charset="utf-8" />
+
+	<!-- style sheets -->
+	<link rel="stylesheet" href="css/style.css">
+
+    <!-- leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+</head>
+<body>
+
+	<div class="header">
+		<b>Me and Museum</b>
+	</div>
+		<h1>My Favorite Museums</h1>
+		<ul>
+		<li> <b>National Museum of Nature and Science</b> does many exhibitions from foreign museums. When I was small, my grandparents took me to this museum. One of my favorite exhibitions was about ancient Egypt. Since then, I have been interested in art history.</li>
+
+		<li> <b>Legions of Honor</b> was my first US museum I visited. At the time, I was learning about ancient Greek art in my art history class, which was why I went to this museum for the ancient Greek art exhibition.</li>
+
+		<li> I visited the <b>American Museum of Natural History</b> when my friend and I traveled to New York. Although there are a lot of sections where you can learn about animals and nature, this museum also displays ancient American art, which is one of my favorite arts.</li>
+
+		<li> <b>Philadelphia Museum of Art</b> is my number one museum. Not only were artifacts exceptional, but also the decorations of each room were detailed. I want to visit this museum again in the future.</li>
+
+		<li> Pop art is also one of my favorite arts, and this is why I wanted to visit <b>Los Angeles County Museum of Art</b> to see Andy Warhol's paintings. When I went there, I was not able to see all exhibits. Thus, I might revisit the museum in the near future.</li>
+		</ul>
+
+	</div>
+	<div class="content">
+		<div id="map"></div>
+	</div>
+
+    <script>
+				
+		let cities = ['San Francisco','New York','Philadelphia','Tokyo','Los Angeles']
+		
+		let data = [
+				{
+					'title':'Legions of Honor (San Francisco, US)',
+					'lat': 37.784500,
+					'lon': -122.500800,
+					'description': 'I visted this museum to see an exhibition of ancient Greek art.', 
+					'url': 'https://www.mercurynews.com/wp-content/uploads/2017/11/09klimt-gods4.jpg?w=1860'
+				},
+				{
+					'title':'American Museum of Natural History (New York, US)',
+					'lat': 40.781300,
+					'lon': -73.974000,
+					'description': 'It was my dream to visit this museum only because this museum featured in the film, Night at the Museum.',
+					'url': 'https://static01.nyt.com/images/2006/12/17/arts/17ande.1.600.jpg?quality=75&auto=webp&disable=upscale'
+				},
+				{
+					'title':'Philadelphia Museum of Art (Philadelphia, US)',
+					'lat': 39.965600,
+					'lon': -75.181000,
+					'description': 'This is my most favorite museum! I really enjoyed learning about Medieval and early Renaissance art across Europe.',
+					'url': 'https://i.pinimg.com/originals/af/fc/94/affc94bea86070b87ee671d777746cb9.jpg'
+				},
+				{
+					'title':'Los Angeles County Museum of Art (Los Angeles, US)',
+					'lat': 34.063900,
+					'lon': -118.359200,
+					'description': 'I wanted to visit here to see pop art, including Andy Warhols paintings.',
+					'url': 'https://live.staticflickr.com/5642/30500745093_5a80fa3722_b.jpg'
+				},
+				{
+					'title':'National Museum of Nature and Science (Tokyo, Japan)',
+					'lat': 35.716300,
+					'lon': 139.776500,
+					'description': 'This is the museum where I used to go to see some special exhibitions, like Egyptian mummies, when I was small and where I became interested in ancient art history',
+					'url': 'https://resources.matcha-jp.com/archive_files/jp/2015/07/DSC00947-1024x680.jpg'
+				}
+		];
+		
+		var map = L.map('map').setView([35.716300,139.776500], 3);
+
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+			}).addTo(map);
+
+			// loop through cities
+			data.forEach(function(item){
+					L.marker([item.lat,item.lon]).addTo(map).bindPopup('<b>' + item.title + '</b>' + ": " + '<br>' + item.description + "<br> <img src = '"+ item.url +"' width = '75%'>").openPopup();
+					console.log('The latitude for ' + item.title + ' is ' + item.lat)
+			});
+
+    </script>
+
+</body>
+</html>

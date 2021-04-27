@@ -63,7 +63,6 @@ data.forEach(function(item,index){
 
 	myMarkers.addTo(map)
 
-
 	// define layers
 	let layers = {
 		"My Favorite Museums": myMarkers

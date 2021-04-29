@@ -23,31 +23,38 @@ function createMap(lat,lon,zl){
 // initialize
 $( document ).ready(function() {
 	createMap(lat,lon,zl);
-    readCSV(toppath);
+
+	// readCSV now accepts 3 arguments
+	// call it twice, once for each layer
+    readCSV(toppath,topmarkers,'red');
+    readCSV(bottompath,bottommarkers,'green');
 });
 
 // function to read csv data
-function readCSV(toppath){
-	Papa.parse(toppath, {
+// this now accepts arguments for path, the featuregroup variable, and the desired color for the circle
+function readCSV(path,featuregroup,color){
+	Papa.parse(path, {
 		header: true,
 		download: true,
 		complete: function(data) {
 			console.log(data);
 			
 			// map the data
-			mapCSV(data);
+			// need to feed this 3 arguments as well
+			mapCSV(data,featuregroup,color);
 
 		}
 	});
 }
 
-function mapCSV(data){
+// this has also been modified to accept three arguments
+function mapCSV(data,featuregroup,color){
 	
     let circleOptions = {
         radius: 5,
         weight: 1,
         color: 'white',
-        fillColor: 'red',
+        fillColor: color, // use the argument for color here
         fillOpacity: .5,
     }
 
@@ -60,66 +67,14 @@ function mapCSV(data){
 		})
 
 		// add marker to featuregroup
-		topmarkers.addLayer(topmarker)
+		// featuregroup is now an argument, so no need to hard code it here
+		featuregroup.addLayer(topmarker)
 
 	})
 
 	// add featuregroup to map
-	topmarkers.addTo(map)
+	featuregroup.addTo(map)
 
 	// fit markers to map
-	map.fitBounds(topmarkers.getBounds())
-};
-
-
-
-// initialize
-$( document ).ready(function() {
-	createMap(lat,lon,zl);
-    readCSV(bottompath);
-});
-
-// function to read csv data
-function readCSV(bottompath){
-	Papa.parse(bottompath, {
-		header: true,
-		download: true,
-		complete: function(data) {
-			console.log(data);
-			
-			// map the data
-			mapCSV(data);
-
-		}
-	});
-}
-
-function mapCSV(data){
-	
-    let circleOptions = {
-        radius: 5,
-        weight: 1,
-        color: 'white',
-        fillColor: 'green',
-        fillOpacity: .5,
-    }
-
-	// loop through each entry
-	data.data.forEach(function(item,index){
-		// create marker (use Latitude instead of lat bc the console said Lantitude instead of lat)
-		let bottommarker = L.circleMarker([item.Latitude,item.Longitude], circleOptions)
-        .on('mouseover', function(){
-        		this.bindPopup(`<b>${item.Country}</b><p>${item.Waste_generation_rate_kg_person_day}kg/person/day</p>`).openPopup()
-		})
-
-		// add marker to featuregroup
-		bottommarkers.addLayer(bottommarker)
-
-	})
-
-	// add featuregroup to map
-	bottommarkers.addTo(map)
-
-	// fit markers to map
-	map.fitBounds(bottommarkers.getBounds())
+	map.fitBounds(featuregroup.getBounds())
 }

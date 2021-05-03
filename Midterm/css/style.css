@@ -10,8 +10,8 @@ body,html {
 
 body {
 	display: grid;
-	grid-template-rows: 80px 1fr 50px;
-	grid-template-columns: 50% 50%;
+	grid-template-rows: 60px 1fr 40px;
+	grid-template-columns: 300px 1fr;
 	grid-template-areas: 
 	"header header"
 	"sidebar content"
@@ -21,13 +21,13 @@ body {
 .header {
 	grid-area: header;
 	padding:10px;
-	background-color: rgb(211, 245, 158);
+	background-color:rgb(211, 245, 158);
 	color: rgb(134, 134, 134);
 	font-size: 2em;
 }
 
 .sidebar {
-	color: rgb(134, 134, 134);
+	color:rgb(134, 134, 134);
 	grid-area: sidebar;
 	padding:10px;
 	background-color: rgb(238, 253, 220);
@@ -41,13 +41,13 @@ body {
 .footer {
 	grid-area: footer;
 	padding:10px;
-	background-color: white;
+	background-color: rgb(233, 233, 233);
 }
 
 .sidebar-item{
 	padding: 10px;
 	background:white;
-	border: 7px solid rgb(218, 195, 168);
+	border: 7px solid rgb(228, 228, 228);
 	margin: 5px;
 	color:gray;
 }

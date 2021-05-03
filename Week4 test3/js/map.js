@@ -4,12 +4,10 @@ let lat = 0;
 let lon = 0;
 let zl = 3;
 // path to csv data
-let toppath = "data/DH151_waste_Top 10.csv";
-let bottompath = "data/DH151_waste_Bottom 10.csv";
+let toppath = "data/DH151_Waste3Top15.csv";
 
 // global variables
 let topmarkers = L.featureGroup();
-let bottommarkers = L.featureGroup();
 
 // create the map
 function createMap(lat,lon,zl){
@@ -27,7 +25,6 @@ $( document ).ready(function() {
 	// readCSV now accepts 3 arguments
 	// call it twice, once for each layer
     readCSV(toppath,topmarkers,'red');
-    readCSV(bottompath,bottommarkers,'green');
 });
 
 // function to read csv data
@@ -60,10 +57,13 @@ function mapCSV(data,featuregroup,color){
 
 	// loop through each entry
 	data.data.forEach(function(item,index){
+
+		circleOptions.radius = item.Mismanaged_plastic_waste * 50
+
 		// create marker (use Latitude instead of lat bc the console said Lantitude instead of lat)
 		let topmarker = L.circleMarker([item.Latitude,item.Longitude], circleOptions)
         .on('mouseover', function(){
-        		this.bindPopup(`<b>${item.Country}</b><p>${item.Waste_generation_rate_kg_person_day}kg/person/day</p>`).openPopup()
+        		this.bindPopup(`<b>${item.Country}</b><p>${item.Mismanaged_plastic_waste}kg/person/day</p>`).openPopup()
 		})
 
 		// add marker to featuregroup

@@ -4,8 +4,8 @@ let lat = 0;
 let lon = 0;
 let zl = 3;
 // path to csv data
-let toppath = "data/DH151_waste_Top 10.csv";
-let bottompath = "data/DH151_waste_Bottom 10.csv";
+let toppath = "data/DH151_Waste3Top15.csv";
+let bottompath = "data/DH151_Waste3Bottom30.csv";
 
 // global variables
 let topmarkers = L.featureGroup();
@@ -60,6 +60,9 @@ function mapCSV(data,featuregroup,color){
 
 	// loop through each entry
 	data.data.forEach(function(item,index){
+
+		circleOptions.radius = item.Mismanaged_plastic_waste * 100
+		
 		// create marker (use Latitude instead of lat bc the console said Lantitude instead of lat)
 		let topmarker = L.circleMarker([item.Latitude,item.Longitude], circleOptions)
         .on('mouseover', function(){

@@ -6,7 +6,7 @@ let zl = 3;
 let path = '';
 
 // put this in your global variables
-let geojsonPath = 'data/world.json';
+let geojsonPath = 'data/waste4.json';
 let geojson_data;
 let geojson_layer;
 
@@ -42,7 +42,7 @@ function getGeoJSON(){
 		geojson_data = data;
 
 		// call the map function
-		mapGeoJSON('pop_est')
+		mapGeoJSON('Mismanaged_plastic_waste_2010_tonnes')
 	})
 }
 
@@ -105,13 +105,13 @@ function getStyle(feature){
 // d is a numeric value
 function getColor(d) {
 
-	return d > 1000000000 ? '#800026' :
-		   d > 500000000  ? '#BD0026' :
-		   d > 200000000  ? '#E31A1C' :
-		   d > 100000000  ? '#FC4E2A' :
-		   d > 50000000   ? '#FD8D3C' :
-		   d > 20000000   ? '#FEB24C' :
-		   d > 10000000   ? '#FED976' :
+	return d > 1000000 ? '#800026' :
+		   d > 500000  ? '#BD0026' :
+		   d > 100000  ? '#E31A1C' :
+		   d > 50000   ? '#FC4E2A' :
+		   d > 10000   ? '#FD8D3C' :
+		   d > 5000    ? '#FEB24C' :
+		   d > 1000    ? '#FED976' :
 					  '#FFEDA0';
 }
 

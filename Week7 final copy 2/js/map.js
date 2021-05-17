@@ -110,7 +110,7 @@ function getColor(d) {
 							  '#FFEDA0';
 }
 
-/*function createLegend(){
+function createLegend(){
 	legend.onAdd = function (map) {
 		var div = L.DomUtil.create('div', 'info legend'),
 		breaks = brew.getBreaks(),
@@ -132,27 +132,6 @@ function getColor(d) {
 		};
 		
 		legend.addTo(map);
-}*/
-
-function createLegend(){
-	legend.onAdd = function (map) {
-		let div = L.DomUtil.create("div", "info legend"); 
-    	div.innerHTML = 
-			'<b>Mismanaged Plastic Waste in 2010</b><br>by Country<br>' +
-			'<small>tonnes</small>' + 
-			'<div style="background-color: #800026"></div>1000000+<br>' +
-			'<div style="background-color: #BD0026"></div>500000 - 1000000<br>' +
-			'<div style="background-color: #E31A1C"></div>100000 - 500000<br>' +
-			'<div style="background-color: #FC4E2A"></div>50000 - 100000<br>' +
-			'<div style="background-color: #FD8D3C"></div>10000 - 50000<br>' +
-			'<div style="background-color: #FEB24C"></div>5000 - 10000<br>' +
-			'<div style="background-color: #FED976"></div>1000 - 5000<br>' +
-			'<div style="background-color: #FFEDA0"></div>0 - 1000<br>' ;
-		
-	return div;
-	};
-		
-	legend.addTo(map);
 }
 
 // Function that defines what will happen on user interactions with each feature

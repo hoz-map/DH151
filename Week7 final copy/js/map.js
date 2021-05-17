@@ -90,8 +90,8 @@ function getStyle(feature){
 		color: 'white',
 		weight: 1,
 		fill: true,
-		///fillColor: getColor(feature.properties['Mismanaged_plastic_waste_2010_tonnes']),
-		fillColor: brew.getColorInRange(feature.properties[fieldtomap]),
+		fillColor: getColor(feature.properties['Mismanaged_plastic_waste_2010_tonnes']),
+		///fillColor: brew.getColorInRange(feature.properties[fieldtomap]),
 		/// map disappears: fillColor: brew.getColorInRange(feature.properties[fieldtomap]),
 		fillOpacity: 0.8
 	}
@@ -101,37 +101,82 @@ function getStyle(feature){
 function getColor(d) {
 
 	return d > 1000000 ? '#800026' :
-		   d > 5000000 ? '#BD0026' :
+		   d > 500000 ? '#BD0026' :
 		   d > 100000  ? '#E31A1C' :
-		   d > 500000  ? '#FC4E2A' :
+		   d > 50000  ? '#FC4E2A' :
 		   d > 10000   ? '#FD8D3C' :
-		   d > 50000   ? '#FEB24C' :
+		   d > 5000   ? '#FEB24C' :
 		   d > 1000    ? '#FED976' :
 							  '#FFEDA0';
 }
 
+let breaks = [-Infinity, 1000, 5000, 10000, 50000, 100000, 500000, 1000000, Infinity];
+let colors = ["#FFEDA0", "#FED976", "#FEB24C", "#FD8D3C", "#FC4E2A","#E31A1C","#BD0026","#800026"];
+
+function getColor(d) {
+    for(let i = 0; i < breaks.length; i++) {
+        if(d > breaks[i] && d <= breaks[i+1]) {
+            return colors[i];
+        }        
+    }
+}
+
+function getStyle(feature){
+	return {
+		fillColor: getColor(feature.properties['Mismanaged_plastic_waste_2010_tonnes']),
+		weight: 0.5,
+		opacity: 1,
+		color: "white",
+		fillOpacity: 0.7
+	}
+}
+
+fetch ("data/waste1.json")
+	.then(function(response) {
+		return response.json();
+	})
+	.then(function(data) {
+		L.geoJson(data, {style: getStyle}).addTo(map);
+	});
+
+
+legend.onAdd = function(map) {
+	let div = L.DomUtil.create("div", "info legend"); 
+	div.innerHTML = 
+		'<b>Mismanaged Plastic Waste in 2010</b><br>by Country<br>' +
+		'<small>tonnes</small>' + 
+		'<div style="background-color: #800026"></div>1000000+<br>' +
+		'<div style="background-color: #BD0026"></div>500000 - 1000000<br>' +
+		'<div style="background-color: #E31A1C"></div>100000 - 500000<br>' +
+		'<div style="background-color: #FC4E2A"></div>50000 - 100000<br>' +
+		'<div style="background-color: #FD8D3C"></div>10000 - 50000<br>' +
+		'<div style="background-color: #FEB24C"></div>5000 - 10000<br>' +
+		'<div style="background-color: #FED976"></div>1000 - 5000<br>' +
+		'<div style="background-color: #FFEDA0"></div>0 - 1000<br>' ;
+	return div;
+};
+
+legend.addTo(map);
+
 function createLegend(){
 	legend.onAdd = function (map) {
-		var div = L.DomUtil.create('div', 'info legend'),
-		breaks = brew.getBreaks(),
-		labels = [],
-		from, to;
+		let div = L.DomUtil.create("div", "info legend"); 
+    	div.innerHTML = 
+			'<b>Mismanaged Plastic Waste in 2010</b><br>by Country<br>' +
+			'<small>tonnes</small>' + 
+			'<div style="background-color: #800026"></div>1000000+<br>' +
+			'<div style="background-color: #BD0026"></div>500000 - 1000000<br>' +
+			'<div style="background-color: #E31A1C"></div>100000 - 500000<br>' +
+			'<div style="background-color: #FC4E2A"></div>50000 - 100000<br>' +
+			'<div style="background-color: #FD8D3C"></div>10000 - 50000<br>' +
+			'<div style="background-color: #FEB24C"></div>5000 - 10000<br>' +
+			'<div style="background-color: #FED976"></div>1000 - 5000<br>' +
+			'<div style="background-color: #FFEDA0"></div>0 - 1000<br>' ;
 		
-		for (var i = 0; i < breaks.length; i++) {
-				from = breaks[i];
-				to = breaks[i + 1];
-				if(to) {
-					labels.push(
-						'<i style="background:' +  brew.getColorInRange(to) + '"></i> ' + /// use brew.getColor instead of  brew.getColorInRange(feature.properties[fieldtomap]) *line 93
-						from.toFixed(2) + ' &ndash; ' + to.toFixed(2));
-					}
-				}
-				
-				div.innerHTML = labels.join('<br>');
-				return div;
-		};
+	return div;
+	};
 		
-		legend.addTo(map);
+	legend.addTo(map);
 }
 
 // Function that defines what will happen on user interactions with each feature

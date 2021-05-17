@@ -90,8 +90,8 @@ function getStyle(feature){
 		color: 'white',
 		weight: 1,
 		fill: true,
-		fillColor: getColor(feature.properties['Mismanaged_plastic_waste_2010_tonnes']),
-		///fillColor: brew.getColorInRange(feature.properties[fieldtomap]),
+		///fillColor: getColor(feature.properties['Mismanaged_plastic_waste_2010_tonnes']),
+		fillColor: brew.getColorInRange(feature.properties[fieldtomap]),
 		/// map disappears: fillColor: brew.getColorInRange(feature.properties[fieldtomap]),
 		fillOpacity: 0.8
 	}
@@ -118,17 +118,17 @@ function createLegend(){
 		from, to;
 		
 		for (var i = 0; i < breaks.length; i++) {
-			from = breaks[i];
-			to = breaks[i + 1];
-			if(to) {
-				labels.push(
-					'<i style="background:' + getColor(feature.properties['Mismanaged_plastic_waste_2010_tonnes'])(to) + '"></i> ' + /// use brew.getColor instead of  brew.getColorInRange(feature.properties[fieldtomap]) *line 93
-					from.toFixed(2) + ' &ndash; ' + to.toFixed(2));
+				from = breaks[i];
+				to = breaks[i + 1];
+				if(to) {
+					labels.push(
+						'<i style="background:' +  brew.getColorInRange(to) + '"></i> ' + /// use brew.getColor instead of  brew.getColorInRange(feature.properties[fieldtomap]) *line 93
+						from.toFixed(2) + ' &ndash; ' + to.toFixed(2));
+					}
 				}
-			}
-			
-			div.innerHTML = labels.join('<br>');
-			return div;
+				
+				div.innerHTML = labels.join('<br>');
+				return div;
 		};
 		
 		legend.addTo(map);
@@ -137,10 +137,10 @@ function createLegend(){
 // Function that defines what will happen on user interactions with each feature
 function onEachFeature(feature, layer) {
 	layer.on({
-		mouseover: highlightFeature,
-		mouseout: resetHighlight,
-		click: zoomToFeature
-	});
+			mouseover: highlightFeature,
+			mouseout: resetHighlight,
+			click: zoomToFeature
+		});
 }
 
 // on mouse over, highlight the feature

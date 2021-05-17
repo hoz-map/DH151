@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>World Choropleth</title>
+	<meta charset="utf-8" />
+
+	<!-- style sheets -->
+	<link rel="stylesheet" href="css/style.css">
+
+	<!-- leaflet -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+	<!-- jquery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!-- classy brew -->
+	<script src="js/classybrew.js"></script>
+
+</head>
+<body>
+
+	<div class="header">
+		<h class="font1">Mismanaged Plastic in the World</h>
+	</div>
+	<div class="sidebar">
+		<h2>What does this map show?</h2>
+		<p>This map shows the amount of plastic waste that are mismanaged in each country.</p>
+
+		<h2>Why does mismanaged plastic waste matter?</h2>
+		<p></p>
+
+	</div>
+	<div class="content">
+		<div id="map"></div>
+	</div>
+	<div class="footer">
+		Data Source: <a href="https://science.sciencemag.org/content/suppl/2015/02/11/347.6223.768.DC1">American Association for the Advancement of Science</a>
+	</div>
+
+	<script src="js/map.js"></script>
+
+</body>
+</html>

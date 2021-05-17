@@ -72,9 +72,9 @@ function mapGeoJSON(field){
 	brew.classify('quantiles');
 
 	// create the layer and add to map
-	geojson_layer = L.geoJson(geojson_data, {
-		style: getStyle //call a function to style each feature
-	}).addTo(map);
+	//geojson_layer = L.geoJson(geojson_data, {
+		//style: getStyle //call a function to style each feature
+	//}).addTo(map);
 
     // create the geojson laye
 	geojson_layer = L.geoJson(geojson_data,{

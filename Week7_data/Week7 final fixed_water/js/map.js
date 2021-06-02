@@ -5,16 +5,16 @@ let lon = 0;
 let zl = 3;
 let path = '';
 
-// put this in your global variables
-let geojsonPath = 'data/waste1.json';
-let geojson_data;
-let geojson_layer;
+
+let geojsonPath = 'data/drinkable_fixed.json'; 
+let geojson_data; 
+let geojson_layer; 
 
 let brew = new classyBrew();
 let fieldtomap;
 
 let legend = L.control({position: 'bottomright'});
-let info_panel = L.control();
+let info_panel = L.control(); 
 
 
 // initialize
@@ -22,7 +22,6 @@ $( document ).ready(function() {
 	createMap(lat,lon,zl);
 	getGeoJSON();
 });
-
 
 // create the map
 function createMap(lat,lon,zl){
@@ -32,8 +31,6 @@ function createMap(lat,lon,zl){
 		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 	}).addTo(map);
 }
-
-
 
 // function to get the geojson data
 function getGeoJSON(){
@@ -45,74 +42,77 @@ function getGeoJSON(){
 		geojson_data = data;
 
 		// call the map function
-		mapGeoJSON('Mismanaged_plastic_waste_2010_tonnes')
+		mapGeoJSON('Coverage')
 	})
 }
-
 
 function mapGeoJSON(field){
 
 	if (geojson_layer){
-			geojson_layer.clearLayers()
+		geojson_layer.clearLayers()
 	}
-
+	
 	fieldtomap = field;
 
 	let values = [];
 
+	// based on the provided field, enter each value into the array
 	geojson_data.features.forEach(function(item,index){
-			values.push(item.properties[field])
+		if(item.properties[field] != undefined){
+			values.push(parseFloat(item.properties[field]))
+		}
+		//values.push(item.properties[field])
 	})
 
+	// set up the "brew" options
 	brew.setSeries(values);
-	brew.setNumClasses(5);
+	brew.setNumClasses(9 /*num_class*/); 
 	brew.setColorCode('YlOrRd');
-	brew.classify('equal_interval'); /// 'quantiles' didn't work.
-	
+	brew.classify('quantile'); 
 
-	// create the layer and add to map
-	geojson_layer = L.geoJson(geojson_data, {
-		style: getStyle, //call a function to style each feature
-		onEachFeature: onEachFeature
-	}).addTo(map);
+    // create the geojson layer
+    geojson_layer = L.geoJson(geojson_data,{
+        style: getStyle,
+        onEachFeature: onEachFeature // actions on each feature
+    }).addTo(map);
 
-	// fit to bounds
 	map.fitBounds(geojson_layer.getBounds())
 
 	createLegend();
-    createInfoPanel();
+
+	createInfoPanel(); 
 }
 
-// style each feature
+
 function getStyle(feature){
 	return {
 		stroke: true,
 		color: 'white',
 		weight: 1,
 		fill: true,
-		fillColor: getColor(feature.properties['Mismanaged_plastic_waste_2010_tonnes']),
-		///fillColor: brew.getColorInRange(feature.properties[fieldtomap]),
-		/// map disappears: fillColor: brew.getColorInRange(feature.properties[fieldtomap]),
+		fillColor: brew.getColorInRange(feature.properties[fieldtomap]),
 		fillOpacity: 0.8
 	}
 }
 
-// return the color for each feature
-function getColor(d) {
 
-	return d > 1000000 ? '#800026' :
-		   d > 500000 ? '#BD0026' :
+// return the color for each feature. called in getStyle --> gets color from population estimate number from data 
+/*function getColor(d) {
+	return d > 1000000 ? '#800026' : // syntax: if value of d is greater than xxxxx, then make it xxx color.
+		   d > 500000  ? '#BD0026' :
 		   d > 100000  ? '#E31A1C' :
 		   d > 50000  ? '#FC4E2A' :
 		   d > 10000   ? '#FD8D3C' :
 		   d > 5000   ? '#FEB24C' :
-		   d > 1000    ? '#FED976' :
-							  '#FFEDA0';
-}
+		   d > 1000   ? '#FED976' :
+					  '#FFEDA0';
+}*/
 
 function createLegend(){
 	legend.onAdd = function (map) {
+        //creates the html div that holds the info for legend
 		var div = L.DomUtil.create('div', 'info legend'),
+        //brew info that gets put into legend
 		breaks = brew.getBreaks(),
 		labels = [],
 		from, to;
@@ -122,7 +122,8 @@ function createLegend(){
 			to = breaks[i + 1];
 			if(to) {
 				labels.push(
-					'<i style="background:' + getColor(feature.properties['Mismanaged_plastic_waste_2010_tonnes'])(to) + '"></i> ' + /// use brew.getColor instead of  brew.getColorInRange(feature.properties[fieldtomap]) *line 93
+                    //the numbers that are actually put into the legend
+					'<i style="background:' + brew.getColorInRange(to) + '"></i> ' +
 					from.toFixed(2) + ' &ndash; ' + to.toFixed(2));
 				}
 			}
@@ -157,15 +158,14 @@ function highlightFeature(e) {
 	if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
 		layer.bringToFront();
 	}
-
-	info_panel.update(layer.feature.properties)
+    //updates the infopanel
+    info_panel.update(layer.feature.properties)
 }
 
 // on mouse out, reset the style, otherwise, it will remain highlighted
 function resetHighlight(e) {
 	geojson_layer.resetStyle(e.target);
-
-	info_panel.update() 
+    info_panel.update(); // resets infopanel when not highlighted, to default
 }
 
 // on mouse click on a feature, zoom in to it
@@ -181,13 +181,15 @@ function createInfoPanel(){
 		return this._div;
 	};
 
-	// method that we will use to update the control based on feature properties passed
+	// method that we will use to update the control based on feature properties fed to it. 
+    //whatever is highlighted, put that in the info panel.
 	info_panel.update = function (properties) {
 		// if feature is highlighted
 		if(properties){
 			this._div.innerHTML = `<b>${properties.name}</b><br>${fieldtomap}: ${properties[fieldtomap]}`;
 		}
-		// if feature is not highlighted
+		// if feature is not highlighted:
+        //but if nothing is highlighted, then panel will tell user to do something
 		else
 		{
 			this._div.innerHTML = 'Hover over a country';

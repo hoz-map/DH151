@@ -38,18 +38,18 @@ body {
 	grid-area: content;
 }
 
-.footer {
-	grid-area: footer;
-	padding:10px;
-	background-color: rgb(175, 175, 175);
-}
-
 .sidebar-item{
 	padding: 10px;
 	background:white;
 	border: 7px solid rgb(218, 195, 168);
 	margin: 5px;
 	color:gray;
+}
+
+.footer {
+	grid-area: footer;
+	padding:10px;
+	background-color: rgb(175, 175, 175);
 }
 
 /* legend styles */

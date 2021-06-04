@@ -1,18 +1,17 @@
 // Global variables
-let map;
-let lat = 0;
-let lon = 0;
-let zl = 3;
-let path = '';
+let choromap;
+let chorolat = 0;
+let chorolon = 0;
+let chorozl = 3;
+let choropath = '';
 
 
-let geojsonPath = 'data/all_data.json'; 
-let geojson_data; 
-
-let geojson_layer; 
+let chorogeojsonPath = 'data/all_data.json'; 
+let chorogeojson_data;
+let chorogeojson_layer; 
 
 let brew = new classyBrew();
-let fieldtomap;
+let chorofieldtomap;
 
 let legend = L.control({position: 'bottomright'});
 let info_panel = L.control(); 
@@ -20,47 +19,47 @@ let info_panel = L.control();
 
 // initialize
 $( document ).ready(function() {
-	createMap(lat,lon,zl);
-	getGeoJSON();
+	createChoroMap(chorolat,chorolon,chorozl);
+	getChoroGeoJSON();
 });
 
 // create the map
-function createMap(lat,lon,zl){
-	map = L.map('map').setView([lat,lon], zl);
+function createChoroMap(lat,lon,zl){
+	choromap = L.map('choromap').setView([chorolat,chorolon],chorozl);
 
 	var OpenStreetMap_HOT = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'
 
-	}).addTo(map);
+	}).addTo(choromap);
 }
 
 // function to get the geojson data
-function getGeoJSON(){
+function getChoroGeoJSON(){
 
-	$.getJSON(geojsonPath,function(data){
+	$.getJSON(chorogeojsonPath,function(data){
 		console.log(data)
 
 		// put the data in a global variable
-		geojson_data = data;
+		chorogeojson_data = data;
 
 		// call the map function
-		mapGeoJSON('Mismanaged_plastic_waste_2010_tonnes','annual_deaths_rate_per100,000','Coverage')
+		mapChoroGeoJSON('Mismanaged_plastic_waste_2010_tonnes','annual_deaths_rate_per100,000','Coverage')
 	})
 }
 
-function mapGeoJSON(field){
+function mapChoroGeoJSON(field){
 
-	if (geojson_layer){
-		geojson_layer.clearLayers()
+	if (chorogeojson_layer){
+		chorogeojson_layer.clearLayers()
 	}
 	
-	fieldtomap = field;
+	chorofieldtomap = field;
 
 	let values = [];
 
 	// based on the provided field, enter each value into the array
-	geojson_data.features.forEach(function(item,index){
+	chorogeojson_data.features.forEach(function(item,index){
 		if(item.properties[field] != undefined){
 			values.push(parseFloat(item.properties[field]))
 		}
@@ -73,14 +72,14 @@ function mapGeoJSON(field){
 	brew.classify('quantile'); 
 
     // create the geojson layer
-	geojson_layer = L.geoJson(geojson_data,{
-        style: getStyle,
-        onEachFeature: onEachFeature // actions on each feature
-    }).addTo(map);
+	chorogeojson_layer = L.geoJson(chorogeojson_data,{
+        style: getChoroStyle,
+        onEachFeature: onEachChoroFeature // actions on each feature
+    }).addTo(choromap);
 
-	map.fitBounds(geojson_layer.getBounds())
+	choromap.fitBounds(chorogeojson_layer.getBounds())
 
-	createLegend();
+	createChoroLegend();
 
 	createInfoPanel(); 
 } 
@@ -91,19 +90,19 @@ function mapGeoJSON(field){
 	var cvd = document.getElementById("annual_deaths_rate_per100,000");
 }*/
 
-function getStyle(feature){
+function getChoroStyle(feature){
 	return {
 		stroke: true,
 		color: 'white',
 		weight: 1,
 		fill: true,
-		fillColor: brew.getColorInRange(feature.properties[fieldtomap]),
+		fillColor: brew.getColorInRange(feature.properties[chorofieldtomap]),
 		fillOpacity: 0.8
 	}
 }
 
-function createLegend(){
-	legend.onAdd = function (map) {
+function createChoroLegend(){
+	legend.onAdd = function (choromap) {
         //creates the html div that holds the info for legend
 		var div = L.DomUtil.create('div', 'info legend'),
         //brew info that gets put into legend
@@ -126,51 +125,51 @@ function createLegend(){
 			return div;
 		};
 		
-		legend.addTo(map);
+		legend.addTo(choromap);
 }
 
 // Function that defines what will happen on user interactions with each feature
-function onEachFeature(feature, layer) {
+function onEachChoroFeature(feature, layer) {
 	layer.on({
 		mouseover: highlightFeature,
 		mouseout: resetHighlight,
-		click: zoomToFeature
+		click: zoomToChoroFeature
 	});
 }
 
 // on mouse over, highlight the feature
 function highlightFeature(e) {
-	var layer = e.target;
+	var chorolayer = e.target;
 
 	// style to use on mouse over
-	layer.setStyle({
+	chorolayer.setStyle({
 		weight: 2,
 		color: '#666',
 		fillOpacity: 0.7
 	});
 
 	if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-		layer.bringToFront();
+		chorolayer.bringToFront();
 	}
     //updates the infopanel
-    info_panel.update(layer.feature.properties)
+    info_panel.update(chorolayer.feature.properties)
 }
 
 // on mouse out, reset the style, otherwise, it will remain highlighted
 function resetHighlight(e) {
-	geojson_layer.resetStyle(e.target);
+	chorogeojson_layer.resetStyle(e.target);
     info_panel.update(); // resets infopanel when not highlighted, to default
 }
 
 // on mouse click on a feature, zoom in to it
-function zoomToFeature(e) {
-	map.fitBounds(e.target.getBounds());
+function zoomToChoroFeature(e) {
+	choromap.fitBounds(e.target.getBounds());
 }
 
 function createInfoPanel(){
 
-	info_panel.onAdd = function (map) {
-		this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+	info_panel.onAdd = function (choromap) {
+		this._div = L.DomUtil.create('div', 'choroinfo'); // create a div with a class "info"
 		this.update();
 		return this._div;
 	};
@@ -180,7 +179,7 @@ function createInfoPanel(){
 	info_panel.update = function (properties) {
 		// if feature is highlighted
 		if(properties){
-			this._div.innerHTML = `<b>${properties.name}</b><br>${fieldtomap}: ${properties[fieldtomap]}`;
+			this._div.innerHTML = `<b>${properties.name}</b><br>${chorofieldtomap}: ${properties[chorofieldtomap]}`;
 		}
 		// if feature is not highlighted:
         //but if nothing is highlighted, then panel will tell user to do something
@@ -190,5 +189,5 @@ function createInfoPanel(){
 		}
 	};
 
-	info_panel.addTo(map);
+	info_panel.addTo(choromap);
 }
